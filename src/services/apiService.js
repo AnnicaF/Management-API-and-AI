@@ -47,3 +47,20 @@ export async function getCurrentUser(token) {
     throw error;
   }
 }
+
+// Opret content node
+export async function createContentNode(data, token) {
+    const host = "https://localhost:44333"; 
+    try {
+      const response = await axios.post(`${host}/umbraco/management/api/v1/document`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Fejl ved oprettelse af content node:", error.response?.data || error.message);
+      throw error;
+    }
+  }
