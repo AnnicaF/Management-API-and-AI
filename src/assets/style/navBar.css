@@ -1,6 +1,6 @@
 .navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Ensures the logo stays on the left, buttons on the right */
     align-items: center;
     padding: 18px;
     background-color: #1b264f;
@@ -9,19 +9,25 @@
     background-size: cover; 
     background-position: center;
     width: 100%;
-  }
-  
-  .logo-container {
+}
+
+.logo-container {
     display: flex;
     align-items: center;
-  }
-  
-  .logo {
+}
+
+.logo {
     height: 40px;
-  }
-  
-  .login-btn {
-    background-color: white; /* Green */
+}
+
+.nav-btns {
+    display: flex;
+    align-items: center; /* Aligns the button and the icon vertically */
+    gap: 15px; /* Adds space between the login button and the settings icon */
+}
+
+.login-btn {
+    background-color: white;
     color: #1b264f;
     padding: 6px 18px;
     border: none;
@@ -29,9 +35,28 @@
     cursor: pointer;
     font-family: 'Lato', sans-serif;
     font-size: 14px;
-  }
-  
-  .login-btn:hover {
+}
+
+.login-btn:hover {
     background-color: #3544b1;
     color: white;
-  }
+}
+
+.settings-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-icon {
+    width: 40px; /* Adjust size of the icon */
+    height: 40px;
+    cursor: pointer;
+    padding: 6px;
+    border: none;
+    border-radius: 3px;
+}
+
+.settings-icon:hover {
+    background-color: #3544b1;
+}
