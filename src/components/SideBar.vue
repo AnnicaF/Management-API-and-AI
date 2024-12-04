@@ -4,6 +4,8 @@
             <h3>Content</h3>
             <img class="add-icon" src="../assets/images/plus.svg" alt="Add icon">
         </div>
+
+        
     </div>
 </template>
 
@@ -13,7 +15,7 @@
   background-color: white;
   color: #050505;
   height: 100vh; /* Adjust height dynamically */
-  padding: 15px;
+  padding: 12px;
   position: fixed; /* Fix it to the side */
   left: 0;
   transition: width 0.3s ease;
@@ -29,6 +31,7 @@
 
 .sidebar-header h3 {
     padding: 12px 24px;
+    font-size: 16px;
 }
 
 .sidebar-header img {
