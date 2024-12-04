@@ -1,0 +1,58 @@
+.sidebar-container {
+    width: 300px;
+    background-color: white;
+    color: #050505;
+    height: 100vh; /* Adjust height dynamically */
+    position: fixed; /* Fix it to the side */
+    left: 0;
+    transition: width 0.3s ease;
+    overflow-y: auto; /* Adds scroll for long content */
+    border-right: 1px solid #d8d7d9;
+  }
+  
+  .sidebar-header {
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically center the elements */
+  }
+  
+  .sidebar-header h3 {
+      padding: 12px 24px;
+      font-size: 16px;
+  }
+  
+  .sidebar-header img {
+      padding: 6px 0px 6px 3px;
+      height: 30px;
+  }
+  
+  .recycle-bin {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 10px 24px;
+  }
+  
+  .recycle-bin:hover {
+      background-color: #f2f2f5;
+      color: #3545b0;
+  }
+  
+  .recycle-bin.active {
+      background-color: #f5c1bc;
+      color: #3545b0;
+  }
+  
+  .recycle-text {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+  }
+  
+  .bin-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }

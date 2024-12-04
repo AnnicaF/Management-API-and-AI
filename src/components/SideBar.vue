@@ -1,3 +1,7 @@
+<script setup>
+    import '../assets/style/sideBar.css';
+</script>
+
 <template>
     <div class="sidebar-container">
         <div class="sidebar-header">
@@ -5,38 +9,14 @@
             <img class="add-icon" src="../assets/images/plus.svg" alt="Add icon">
         </div>
 
-        
+        <div class="recycle-bin" onclick="toggleActiveState(event)">
+            <div class="bin-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+            </div>
+            <p class="recycle-text">
+                Recycle Bin
+            </p>
+        </div>
     </div>
 </template>
 
-<style>
-.sidebar-container {
-  width: 300px;
-  background-color: white;
-  color: #050505;
-  height: 100vh; /* Adjust height dynamically */
-  padding: 12px;
-  position: fixed; /* Fix it to the side */
-  left: 0;
-  transition: width 0.3s ease;
-  overflow-y: auto; /* Adds scroll for long content */
-  border-right: 1px solid #d8d7d9;
-}
-
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center; /* Vertically center the elements */
-}
-
-.sidebar-header h3 {
-    padding: 12px 24px;
-    font-size: 16px;
-}
-
-.sidebar-header img {
-    padding: 6px 0px 6px 3px;
-    height: 30px;
-}
-
-</style>
