@@ -5,15 +5,30 @@
         {{ isLoading ? "Henter data..." : "Hent Bruger" }}
       </button>
   
-      <!-- Opret content node-knap -->
-      <button @click="createNode" :disabled="isNodeLoading" class="create-node-button">
-        {{ isNodeLoading ? "Opretter..." : "Opret Content Node" }}
-      </button>
+      <!-- Inputfelt og knap til at sende prompt til OpenAI -->
+      <div class="openai-input">
+        <textarea 
+          v-model="userPrompt" 
+          placeholder="Skriv din prompt her..." 
+          rows="4" 
+          cols="50"
+        ></textarea>
+  
+        <button @click="fetchOpenAI" :disabled="isNodeLoading" class="fetch-openai-button">
+          {{ isNodeLoading ? "Henter OpenAI..." : "Send Prompt til OpenAI" }}
+        </button>
+      </div>
   
       <!-- Viser brugerdata -->
       <div v-if="user" class="user-info">
         <h3>Hej, {{ user.name }}</h3>
         <p>Email: {{ user.email }}</p>
+      </div>
+  
+      <!-- Viser OpenAI data -->
+      <div v-if="aiResponse" class="ai-response">
+        <h3>{{ aiResponse.title }}</h3>
+        <p>{{ aiResponse.body }}</p>
       </div>
   
       <!-- Viser succesbesked -->
@@ -29,14 +44,19 @@
   </template>
   
   <script>
-  import { getToken, getCurrentUser, createContentNode } from "../services/apiService";
+  import { getToken, getCurrentUser, fetchOpenAIResponse, createContentNode } from "../services/apiService";
+  import axios from 'axios';
+
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
   
   export default {
     data() {
       return {
         user: null,
+        aiResponse: null,
         isLoading: false,
         isNodeLoading: false,
+        userPrompt: '',
         successMessage: null,
         error: null,
       };
@@ -62,46 +82,43 @@
           this.isLoading = false;
         }
       },
-      async createNode() {
+  
+      async fetchOpenAI() {
         this.isNodeLoading = true;
-        this.successMessage = null;
         this.error = null;
-  
-        // Request body data
-        const requestData = {
-          values: [],
-          variants: [
-            {
-              culture: null,
-              segment: null,
-              name: "Content Node ", // Du kan ændre denne titel, hvis nødvendigt
-            },
-          ],
-          parent: {
-            id: "e9862648-dd5a-454a-bdad-3e3d6343b257", // Forælderens ID
-          },
-          documentType: {
-            id: "c3b10a51-b8d3-4ad2-b5a0-15a3cd99b6ca", // DocumentType ID
-          },
-          template: {
-            id: "518c282d-6591-4943-8b29-cfe9fdf70c58", // Template ID
-          },
-        };
-  
+        this.aiResponse = null;
+
         try {
-          // Hent adgangstoken
-          const token = await getToken();
-  
-          // Opret content node
-          const response = await createContentNode(requestData, token);
-          this.successMessage = "Content node oprettet med ID: " + response.id;
+            const prompt = this.userPrompt.trim();
+            if (!prompt) {
+            throw new Error("Prompt kan ikke være tom.");
+            }
+
+            const token = await getToken();
+            console.log("Token hentet:", token);
+
+            // Send prompten til backend for at få OpenAI respons
+            const response = await fetchOpenAIResponse(prompt, token);
+            console.log("Respons modtaget:", response);
+
+            // Validér OpenAI response
+            if (!response || typeof response !== 'object' || !response.response) {
+            throw new Error("Ugyldigt svar fra serveren.");
+            }
+
+            this.aiResponse = response.response; // Gem OpenAI responsen
+
+            // Send kun title til Umbraco (for enkelhedens skyld)
+            const umbracoResponse = await createContentNode({ title: this.aiResponse.title }, token);
+            this.successMessage = "Content node er oprettet i Umbraco!";
+
         } catch (error) {
-          this.error = "Kunne ikke oprette content node. Tjek konsollen for detaljer.";
-          console.error("Fejl ved oprettelse af content node:", error);
+            this.error = error.message || "En ukendt fejl opstod.";
+            console.error('Fejl ved OpenAI-anmodning:', error);
         } finally {
-          this.isNodeLoading = false;
+            this.isNodeLoading = false;
         }
-      },
+        }
     },
   };
   </script>
@@ -113,7 +130,7 @@
   }
   
   .fetch-user-button,
-  .create-node-button {
+  .fetch-openai-button {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #4caf50;
@@ -125,13 +142,32 @@
   }
   
   .fetch-user-button:disabled,
-  .create-node-button:disabled {
+  .fetch-openai-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }
   
+  .openai-input {
+    margin-top: 20px;
+  }
+  
+  textarea {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
   .user-info {
     margin-top: 20px;
+  }
+  
+  .ai-response {
+    margin-top: 20px;
+    white-space: pre-wrap;
   }
   
   .success-message {
