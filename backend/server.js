@@ -40,7 +40,7 @@ app.post('/openai', async (req, res) => {
         model: 'gpt-3.5-turbo',
         messages: [
           { role: 'system', content: "You are a helpful assistant that generates structured JSON responses." },
-          { role: 'user', content: `Generate a structured JSON response with a 'title' and a 'body'. The 'title' should be a concise and clear summary, and the 'body' should be detailed content based on the following prompt: "${sanitizedPrompt}"` }
+          { role: 'user', content: `Generate a structured JSON response with a 'title' and a 'body'. Always in english. The 'title' should be a concise and clear summary, and the 'body' should be detailed content based on the following prompt: "${sanitizedPrompt}"` }
         ]
       },
       {
