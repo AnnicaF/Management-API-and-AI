@@ -28,8 +28,8 @@
 }
 
 .login-btn {
-    background-color: white;
-    color: #1b264f;
+    background-color: #D42056;
+    color: white;
     padding: 6px 18px;
     border: none;
     border-radius: 3px;
@@ -39,7 +39,7 @@
 }
 
 .login-btn:hover {
-    background-color: #3544b1;
+    background-color: #E23C6B;
     color: white;
 }
 
