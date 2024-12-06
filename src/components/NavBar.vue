@@ -9,10 +9,7 @@
         </div>
         <div class="nav-btns"> 
             <!-- TODO: Add @click="" -->
-            <button class="login-btn">Login</button> 
-            <div class="settings-container">
-                <img class="settings-icon" src="../assets/images/settings.svg" alt="Settings icon">
-            </div>
+            <button class="login-btn">Logout</button> 
         </div>
     </nav>
 </template>
