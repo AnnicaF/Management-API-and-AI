@@ -1,4 +1,7 @@
 <template>
+    <nav>
+        <NavBar/> 
+    </nav>
     <div class="home-view">
       <UserInfoComponent />
       <OpenAIComponent />
@@ -6,6 +9,7 @@
   </template>
   
   <script setup>
+  import NavBar from '../components/NavBar.vue'
   import UserInfoComponent from '../components/UserInfoComponent.vue';
   import OpenAIComponent from '../components/OpenAIComponent.vue';
   </script>
@@ -16,4 +20,3 @@
     margin: 20px;
   }
   </style>
-  
