@@ -3,7 +3,6 @@
         <NavBar/> 
     </nav>
     <div class="home-view">
-      <UserInfoComponent />
       <OpenAIComponent />
     </div>
   </template>
