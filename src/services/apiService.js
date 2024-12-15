@@ -68,7 +68,7 @@ export async function createContentNode(data, token) {
         id: "c3b10a51-b8d3-4ad2-b5a0-15a3cd99b6ca",  
       },
       template: {
-        id: "518c282d-6591-4943-8b29-cfe9fdf70c58",  // Dit template ID
+        id: "518c282d-6591-4943-8b29-cfe9fdf70c58", 
       },
     };
   

@@ -1,7 +1,7 @@
 <script setup>
     import '../assets/style/navBar.css';
-    import { useAuthService } from '../services/authService'; // Importer authService
-    const { logout } = useAuthService(); // Hent logout funktionen
+    import { useAuthService } from '../services/authService'; 
+    const { logout } = useAuthService(); 
 </script>
 
 <template>
