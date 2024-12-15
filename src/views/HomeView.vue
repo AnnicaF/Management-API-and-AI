@@ -4,6 +4,7 @@
   import OpenAIComponent from '../components/OpenAIComponent.vue';
   import ReminderText from '../components/ReminderText.vue';
   import HeaderComponent from '../components/HeaderComponent.vue';
+  import Footer from '../components/Footer.vue'
 </script>
 
 <template>
@@ -15,6 +16,7 @@
     <OpenAIComponent />
     <ReminderText />
   </div>
+      <Footer/>
 </template>
 
   
