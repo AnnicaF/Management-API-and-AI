@@ -15,8 +15,8 @@
     <HeaderComponent />
     <OpenAIComponent />
     <ReminderText />
+    <Footer/>
   </div>
-      <Footer/>
 </template>
 
   
