@@ -10,7 +10,8 @@
             <img class="logo" src="../assets/images/umbraco_logo_white_horizontal.svg" alt="Umbraco logo - white">
         </div>
         <div class="nav-btns"> 
-            <button @click="logout" class="logout-btn">Logout</button> 
+            <!-- TODO: Add @click="" -->
+            <button class="login-btn">Logout</button> 
         </div>
     </nav>
 </template>

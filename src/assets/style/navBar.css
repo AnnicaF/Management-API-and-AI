@@ -27,7 +27,7 @@
     gap: 15px; 
 }
 
-.logout-btn {
+.login-btn {
     background-color: #D42056;
     color: #fff;
     padding: 6px 18px;
@@ -38,8 +38,8 @@
     font-size: 14px;
 }
 
-.logout-btn:hover {
-    background-color: #3544b1;
+.login-btn:hover {
+    background-color: #E23C6B;
     color: white;
 }
 
