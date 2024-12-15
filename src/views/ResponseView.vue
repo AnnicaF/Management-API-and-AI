@@ -5,9 +5,9 @@
     <div class="response-view">
       <AiResponse />
       <OpenAIComponent size="small" placeholderText="Want to change your question or generate a new promt?"/>
+      <ReminderText />
+      <Footer />
     </div>
-    <ReminderText />
-    <BottomBox />
   </template>
   
   <script setup>
@@ -15,8 +15,8 @@
     import { useRouter } from 'vue-router';
     import AiResponse from '../components/AiResponse.vue';
     import ReminderText from '../components/ReminderText.vue';
-    import BottomBox from '../components/BottomBox.vue';
     import OpenAIComponent from '../components/OpenAIComponent.vue';
+    import Footer from '../components/Footer.vue';
     
   const router = useRouter();
   
