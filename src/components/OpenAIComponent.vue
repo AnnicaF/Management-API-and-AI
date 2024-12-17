@@ -47,7 +47,7 @@ const aiResponse = ref(null);
 const isNodeLoading = ref(false);
 const successMessage = ref(null);
 const error = ref(null);
-const router = useRouter();
+const router = useRouter(); // Vue Router
 
 const sizeClass = computed(() => {
   return props.size === 'small' ? 'textarea-small' : 'textarea-large';
@@ -96,33 +96,50 @@ defineExpose({
 });
 
 const handleSend = async () => {
-  if (!userPrompt.value.trim()) return;
-
-  // Add the user's message to the message list
-  addMessage('user', userPrompt.value);
-
-  isNodeLoading.value = true;
-  successMessage.value = null;
-  error.value = null;
-
+  const token = await getToken();
   try {
-    const token = await getToken(); 
-    
-    const aiResponse = await fetchOpenAIResponse(userPrompt.value, token); 
-    addMessage('ai', aiResponse);
-    successMessage.value = "Response added to chat!";
+    // Hent OpenAI svar via backend
+    const response = await fetchOpenAIResponse(userPrompt.value, token);
 
-  } catch (err) {
-    error.value = "Something went wrong!";
-    console.error(err);
-  } finally {
-    isNodeLoading.value = false;
+    // Logg den rå JSON respons for at inspicere strukturen
+    console.log('Raw OpenAI Response:', response);
+
+    if (!response || typeof response !== 'object' || !response.response) {
+      throw new Error('Ugyldigt svar fra OpenAI.');
+    }
+
+    // Forvent at responsen allerede har 'title' og 'body'
+    const { title, body } = response.response;
+
+    if (!title || !body) {
+      throw new Error('Responsen indeholder ikke de nødvendige felter.');
+    }
+
+    // Tilføj brugerens besked og gem prompten
+    addMessage('user', { title: userPrompt.value, body: '', prompt: userPrompt.value });
+
+    // Tilføj AI responsen som title og body
+    addMessage('ai', { title, body, prompt: '' });
+
+    // Nulstil input
+    userPrompt.value = '';
+
+    // Naviger til "responseview" ruten
+    router.push({ name: 'response' });
+
+  } catch (error) {
+    console.error('Fejl ved hentning af OpenAI svar:', error);
+    error.value = error.message || 'En ukendt fejl opstod.';
   }
-  router.push({ name: 'response' });
-
-  userPrompt.value = '';
 };
+
+
+
+
+
+
 </script>
+
 
 <style scoped>
 .textarea-container {
