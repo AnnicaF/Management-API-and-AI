@@ -47,7 +47,7 @@ const aiResponse = ref(null);
 const isNodeLoading = ref(false);
 const successMessage = ref(null);
 const error = ref(null);
-const router = useRouter(); // Vue Router
+const router = useRouter();
 
 const sizeClass = computed(() => {
   return props.size === 'small' ? 'textarea-small' : 'textarea-large';
@@ -98,20 +98,18 @@ defineExpose({
 const handleSend = async () => {
   const token = await getToken();
   try {
-    // Hent OpenAI svar via backend
+
     const response = await fetchOpenAIResponse(userPrompt.value, token);
 
-    // Logg den rå JSON respons for at inspicere strukturen
     console.log('Raw OpenAI Response:', response);
 
     if (!response || typeof response !== 'object' || !response.response) {
       throw new Error('Ugyldigt svar fra OpenAI.');
     }
 
-    // Forvent at responsen allerede har 'title' og 'body'
-    const { title, body } = response.response;
+    const { title, bodytext } = response.response;
 
-    if (!title || !body) {
+    if (!title || !bodytext) {
       throw new Error('Responsen indeholder ikke de nødvendige felter.');
     }
 
@@ -119,12 +117,10 @@ const handleSend = async () => {
     addMessage('user', { title: userPrompt.value, body: '', prompt: userPrompt.value });
 
     // Tilføj AI responsen som title og body
-    addMessage('ai', { title, body, prompt: '' });
+    addMessage('ai', { title, body: bodytext, prompt: '' });
 
-    // Nulstil input
     userPrompt.value = '';
 
-    // Naviger til "responseview" ruten
     router.push({ name: 'response' });
 
   } catch (error) {
@@ -132,14 +128,7 @@ const handleSend = async () => {
     error.value = error.message || 'En ukendt fejl opstod.';
   }
 };
-
-
-
-
-
-
 </script>
-
 
 <style scoped>
 .textarea-container {

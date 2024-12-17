@@ -49,21 +49,23 @@ export async function getCurrentUser(token) {
   }
 }
 
-// Opret content node
-export async function createContentNode(token) {
-  const umbracoApiUrl = "https://localhost:44333";
-  
+export async function createContentNode(aiResponse, token) {
+  const umbracoApiUrl = "https://localhost:44333"; 
+
   const requestBody = {
-    values: [],
+    values: [
+      { alias: "title", value: aiResponse.title }, 
+      { alias: "bodyText", value: aiResponse.body },
+    ],
     variants: [
       {
         culture: null,
         segment: null,
-        name: "test", 
+        name: aiResponse.title, 
       },
     ],
     parent: {
-      id: "e9862648-dd5a-454a-bdad-3e3d6343b257",  
+      id: "e9862648-dd5a-454a-bdad-3e3d6343b257", 
     },
     documentType: {
       id: "c3b10a51-b8d3-4ad2-b5a0-15a3cd99b6ca", 
@@ -76,18 +78,20 @@ export async function createContentNode(token) {
   try {
     const response = await axios.post(`${umbracoApiUrl}/umbraco/management/api/v1/document`, requestBody, {
       headers: {
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
 
-    console.log("Content node oprettet:", response.data);
-    return response.data;  
+    return response.data;
   } catch (error) {
     console.error("Fejl ved oprettelse af content node:", error.response?.data || error.message);
     throw error;
   }
 }
+
+
+
 
 export const fetchOpenAIResponse = async (prompt, token) => {
   try {
