@@ -18,43 +18,16 @@
           </div>
         </div>
       </div>
-  
-      <!-- test knap -->
-      <button @click="handleCreateContentNode" class="create-node-btn">Opret Content Node</button>
+
+      <FooterComponent />
     </div>
   </template>
   
   <script setup>
-  import { ref } from 'vue';
-  import { getToken, createContentNode as apiCreateContentNode } from '../services/apiService.js';
-  import { messages as messageStore } from '../stores/messageStore.js'; 
-  import { getLastAIMessage } from '../stores/messageStore.js';
-  const messages = messageStore;
+  import FooterComponent from './Footer.vue';
+  import { messages as messageStore } from '../stores/messageStore.js';
   
-
-const handleCreateContentNode = async () => {
-  try {
-    const token = await getToken();
-    const latestAIMessage = getLastAIMessage();
-
-    if (!latestAIMessage) {
-      throw new Error('Ingen AI-besked fundet!');
-    }
-
-    const aiResponse = {
-      title: latestAIMessage.title || "Default Title",
-      body: latestAIMessage.body || "Default Body",
-    };
-
-    const response = await apiCreateContentNode(aiResponse, token);
-
-    console.log('Content node oprettet:', response);
-  } catch (error) {
-    console.error('Fejl ved oprettelse af content node:', error.message);
-  }
-};
-
-
+  const messages = messageStore;
   </script>
 <style scoped>
 .chat-container {
