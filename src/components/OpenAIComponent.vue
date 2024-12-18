@@ -27,9 +27,8 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router'; 
-import { addMessage } from '../stores/messageStore.js'; 
-import { getToken } from '../services/apiService';
-import { fetchOpenAIResponse } from '../services/apiservice.js'; 
+import { addMessage, addUnformatted, unformattedMessages } from '../stores/messageStore.js'; 
+import { getToken, fetchOpenAIResponse, fetchOpenAIResponseWithHistory } from '../services/apiService';
 
 const props = defineProps({
   size: {
@@ -98,8 +97,8 @@ defineExpose({
 const handleSend = async () => {
   const token = await getToken();
   try {
-
-    const response = await fetchOpenAIResponse(userPrompt.value, token);
+    console.log(JSON.stringify([...unformattedMessages,{"role": "user", "content": [{"type": "text", "text": userPrompt.value}]}]))
+    const response = await fetchOpenAIResponseWithHistory(JSON.stringify([...unformattedMessages, {"role": "user", "content": [{"type": "text", "text": userPrompt.value}]}]), token);
 
     console.log('Raw OpenAI Response:', response);
 
@@ -115,9 +114,10 @@ const handleSend = async () => {
 
     // Tilføj brugerens besked og gem prompten
     addMessage('user', { title: userPrompt.value, body: '', prompt: userPrompt.value });
-
+    addUnformatted("user", [{"type": "text", "text": userPrompt.value}])
     // Tilføj AI responsen som title og body
     addMessage('ai', { title, body: bodytext, prompt: '' });
+    addUnformatted("assistant", [{"type": "text", "text": JSON.stringify(response.response)}])
 
     userPrompt.value = '';
 

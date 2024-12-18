@@ -110,3 +110,21 @@ export const fetchOpenAIResponse = async (prompt, token) => {
     throw error;
   }
 };
+
+export const fetchOpenAIResponseWithHistory = async (history, token) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/openaiwithhistory",
+      { history: history },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Fejl ved hentning af OpenAI svar:", error);
+    throw error;
+  }
+};
