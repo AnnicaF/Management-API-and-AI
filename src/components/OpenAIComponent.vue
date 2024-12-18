@@ -28,8 +28,7 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router'; 
 import { addMessage } from '../stores/messageStore.js'; 
-import { getToken } from '../services/apiService';
-import { fetchOpenAIResponse } from '../services/apiservice.js'; 
+import { getToken, fetchOpenAIResponse } from '../services/apiService';
 
 const props = defineProps({
   size: {
