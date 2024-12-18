@@ -5,7 +5,7 @@ const host = import.meta.env.VITE_API_HOST;
 const clientId = import.meta.env.VITE_CLIENT_ID;
 const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
 
-// Hent adgangstoken
+
 export async function getToken() {
   try {
     const params = new URLSearchParams();
@@ -31,6 +31,7 @@ export async function getToken() {
   }
 }
 
+
 // Hent nuværende brugerdata
 export async function getCurrentUser(token) {
   try {
@@ -48,62 +49,64 @@ export async function getCurrentUser(token) {
   }
 }
 
-// Opret content node
-export async function createContentNode(data, token) {
-    const umbracoApiUrl = "https://localhost:44333";
-  
-    const requestBody = {
-      values: [],
-      variants: [
-        {
-            culture: null,
-            segment: null,
-            name: data.title, 
-        }
-      ],
-      parent: {
-        id: "e9862648-dd5a-454a-bdad-3e3d6343b257",  
-      },
-      documentType: {
-        id: "c3b10a51-b8d3-4ad2-b5a0-15a3cd99b6ca",  
-      },
-      template: {
-        id: "518c282d-6591-4943-8b29-cfe9fdf70c58", 
-      },
-    };
-  
-    try {
-      // Send data til Umbraco API
-      const response = await axios.post(`${umbracoApiUrl}/umbraco/management/api/v1/document`, requestBody, {
-        headers: {
-          Authorization: `Bearer ${token}`,  // Authorization header med token
-          "Content-Type": "application/json",
-        },
-      });
-  
-      console.log("Content node oprettet:", response.data);
-      return response.data;  // Returnér svar fra Umbraco
-    } catch (error) {
-      console.error("Fejl ved oprettelse af content node:", error.response?.data || error.message);
-      throw error;
-    }
-  }
-  
+export async function createContentNode(aiResponse, token) {
+  const umbracoApiUrl = "https://localhost:44333"; 
 
-  export const fetchOpenAIResponse = async (prompt, token) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/openai",
-        { prompt: prompt },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Fejl ved hentning af OpenAI svar:", error);
-      throw error;
-    }
+  const requestBody = {
+    values: [
+      { alias: "title", value: aiResponse.title }, 
+      { alias: "bodyText", value: aiResponse.body },
+    ],
+    variants: [
+      {
+        culture: null,
+        segment: null,
+        name: aiResponse.title, 
+      },
+    ],
+    parent: {
+      id: "e9862648-dd5a-454a-bdad-3e3d6343b257", 
+    },
+    documentType: {
+      id: "c3b10a51-b8d3-4ad2-b5a0-15a3cd99b6ca", 
+    },
+    template: {
+      id: "518c282d-6591-4943-8b29-cfe9fdf70c58", 
+    },
   };
+
+  try {
+    const response = await axios.post(`${umbracoApiUrl}/umbraco/management/api/v1/document`, requestBody, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Fejl ved oprettelse af content node:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+
+
+
+export const fetchOpenAIResponse = async (prompt, token) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/openai",
+      { prompt: prompt },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Fejl ved hentning af OpenAI svar:", error);
+    throw error;
+  }
+};

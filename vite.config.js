@@ -17,7 +17,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/openai': 'http://localhost:3000',  // Proxy til din backend
+      '/openai': 'http://localhost:3000',
+        // Proxy til din backend
     },
   },
 })

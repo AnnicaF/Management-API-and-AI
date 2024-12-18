@@ -96,31 +96,37 @@ defineExpose({
 });
 
 const handleSend = async () => {
-  if (!userPrompt.value.trim()) return;
-
-  // Add the user's message to the message list
-  addMessage('user', userPrompt.value);
-
-  isNodeLoading.value = true;
-  successMessage.value = null;
-  error.value = null;
-
+  const token = await getToken();
   try {
-    const token = await getToken(); 
-    
-    const aiResponse = await fetchOpenAIResponse(userPrompt.value, token); 
-    addMessage('ai', aiResponse);
-    successMessage.value = "Response added to chat!";
 
-  } catch (err) {
-    error.value = "Something went wrong!";
-    console.error(err);
-  } finally {
-    isNodeLoading.value = false;
+    const response = await fetchOpenAIResponse(userPrompt.value, token);
+
+    console.log('Raw OpenAI Response:', response);
+
+    if (!response || typeof response !== 'object' || !response.response) {
+      throw new Error('Ugyldigt svar fra OpenAI.');
+    }
+
+    const { title, bodytext } = response.response;
+
+    if (!title || !bodytext) {
+      throw new Error('Responsen indeholder ikke de nødvendige felter.');
+    }
+
+    // Tilføj brugerens besked og gem prompten
+    addMessage('user', { title: userPrompt.value, body: '', prompt: userPrompt.value });
+
+    // Tilføj AI responsen som title og body
+    addMessage('ai', { title, body: bodytext, prompt: '' });
+
+    userPrompt.value = '';
+
+    router.push({ name: 'response' });
+
+  } catch (error) {
+    console.error('Fejl ved hentning af OpenAI svar:', error);
+    error.value = error.message || 'En ukendt fejl opstod.';
   }
-  router.push({ name: 'response' });
-
-  userPrompt.value = '';
 };
 </script>
 
@@ -129,6 +135,7 @@ const handleSend = async () => {
   position: relative;
   display: inline-block;
   width: 800px;
+  margin-bottom: 100px;
 }
 
 .custom-textarea {

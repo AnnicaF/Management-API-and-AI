@@ -1,96 +1,150 @@
 <template>
     <div class="chat-container">
-      <div v-for="(message, index) in messages" :key="index" :class="['message-container', message.role === 'user' ? 'user-message' : 'ai-message']">
-        <div :class="['initials', message.role === 'user' ? 'user-initials' : 'ai-initials']">
-          <span>{{ message.role === 'user' ? 'JD' : 'UW' }}</span>
+      <div 
+        v-for="(message, index) in messages" 
+        :key="index" 
+        :class="['message-container', message.role === 'user' ? 'user-message' : 'ai-message']">
+      
+        <div v-if="message.role === 'user'" class="user-message-content">
+          <span class="user-prompt-text">{{ message.prompt }}</span>
+          <span class="user-initials">JD</span>
         </div>
-        <div class="message-content">
-          <p>{{ message.content }}</p>
+  
+        <div v-if="message.role === 'ai'" class="ai-response-container">
+          <span class="ai-initials">UW</span>
+          <div class="ai-textarea-container">
+            <textarea v-model="message.title" class="title-field" placeholder="Title"></textarea>
+            <textarea v-model="message.body" class="body-field" placeholder="Body"></textarea>
+          </div>
         </div>
       </div>
+
+      <FooterComponent />
     </div>
   </template>
   
   <script setup>
-  import { ref } from 'vue';
-  import { messages as messageStore, addMessage } from '../stores/messageStore.js'; 
-  import { fetchOpenAIResponse } from '../services/apiservice.js';
+  import FooterComponent from './Footer.vue';
+  import { messages as messageStore } from '../stores/messageStore.js';
   
-  // messageStore til at få adgang til beskederne
   const messages = messageStore;
-  
-  const userPrompt = ref('');
-  const aiResponse = ref({
-    title: '',
-    body: '',
-  });
-  
-  // prompt til backend
-  const handleSend = async () => {
-    const token = await getToken(); 
-    try {
-      // Hent OpenAI svar via backend
-      const response = await fetchOpenAIResponse(userPrompt.value, token);
-  
-      aiResponse.value = response.response;
-  
-      // Tilføj brugerens prompt og AI svaret til chatten
-      messages.push({ role: 'user', content: userPrompt.value });
-      messages.push({ role: 'ai', content: `${aiResponse.value.title}\n${aiResponse.value.body}` });
-  
-    } catch (error) {
-      console.error('Fejl ved hentning af OpenAI svar:', error);
-    }
-  };
   </script>
-  
-  <style scoped>
-  .chat-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding-top: 20px;
-  }
-  
-  .message-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .user-message {
-    justify-content: flex-end;
-  }
-  
-  .ai-message {
-    justify-content: flex-start;
-  }
-  
-  .user-initials {
-    background-color: #f2f2f5;
-    margin-left: 10px;
-  }
-  
-  .ai-initials {
-    background-color: #1B254F;
-    color: white;
-    margin-right: 10px;
-  }
-  
-  .message-content {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 10px;
-    max-width: 70%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    word-wrap: break-word;
-  }
-  
-  .user-message .message-content {
-    background-color: #d3f8e2; 
-  }
-  
-  .ai-message .message-content {
-    background-color: #f0f0f0;
-  }
-  </style>
-  
+<style scoped>
+.chat-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+.message-container {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding: 5px;
+  position: relative; 
+}
+
+.user-message {
+  justify-content: flex-end;
+}
+
+.ai-message {
+  justify-content: flex-start;
+}
+
+.user-message-content {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-prompt-text {
+  font-size: 16px;
+  color: #000;
+  background-color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  height: 50px;
+  line-height: 30px;
+  box-sizing: border-box;
+  pointer-events: none; 
+}
+
+
+.user-initials {
+  background-color: #fff;
+  border: 2px solid #3545B0; 
+  color: #3545B0; 
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  position: absolute;
+  right: -50px; 
+  top: 35%;
+  transform: translateY(-50%);
+}
+
+
+.ai-response-container {
+  display: flex;
+  align-items: flex-start; 
+  gap: 20px; 
+  width: 800px; 
+  background-color: white; 
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+}
+
+.ai-initials {
+  background-color: #1B254F;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 18px;
+  position: absolute;
+  left: -70px; 
+  transform: translateY(-50%);
+}
+
+.ai-textarea-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.title-field {
+  width: 100%;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  resize: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.body-field {
+  width: 100%;
+  height: 200px;
+  font-size: 16px;
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  resize: none;
+  outline: none;
+  box-sizing: border-box;
+}
+</style>
