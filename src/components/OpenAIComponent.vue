@@ -27,8 +27,8 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router'; 
-import { addMessage, addUnformatted, unformattedMessages } from '../stores/messageStore.js'; 
-import { getToken, fetchOpenAIResponse, fetchOpenAIResponseWithHistory } from '../services/apiService';
+import { addMessage, addToHistory, messageHistory } from '../stores/messageStore.js'; 
+import { getToken, fetchOpenAIResponseWithHistory } from '../services/apiService';
 
 const props = defineProps({
   size: {
@@ -97,8 +97,7 @@ defineExpose({
 const handleSend = async () => {
   const token = await getToken();
   try {
-    console.log(JSON.stringify([...unformattedMessages,{"role": "user", "content": [{"type": "text", "text": userPrompt.value}]}]))
-    const response = await fetchOpenAIResponseWithHistory(JSON.stringify([...unformattedMessages, {"role": "user", "content": [{"type": "text", "text": userPrompt.value}]}]), token);
+    const response = await fetchOpenAIResponseWithHistory(JSON.stringify([...messageHistory, {"role": "user", "content": [{"type": "text", "text": userPrompt.value}]}]), token);
 
     console.log('Raw OpenAI Response:', response);
 
@@ -109,15 +108,15 @@ const handleSend = async () => {
     const { title, bodytext } = response.response;
 
     if (!title || !bodytext) {
-      throw new Error('Responsen indeholder ikke de nødvendige felter.');
+      throw new Error('The response does not contain the required fields.');
     }
 
     // Tilføj brugerens besked og gem prompten
     addMessage('user', { title: userPrompt.value, body: '', prompt: userPrompt.value });
-    addUnformatted("user", [{"type": "text", "text": userPrompt.value}])
+    addToHistory("user", [{"type": "text", "text": userPrompt.value}])
     // Tilføj AI responsen som title og body
     addMessage('ai', { title, body: bodytext, prompt: '' });
-    addUnformatted("assistant", [{"type": "text", "text": JSON.stringify(response.response)}])
+    addToHistory("assistant", [{"type": "text", "text": JSON.stringify(response.response)}])
 
     userPrompt.value = '';
 

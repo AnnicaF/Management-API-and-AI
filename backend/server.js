@@ -20,59 +20,6 @@ app.use(cors(corsOptions));
 // Umbraco API host
 const host = 'https://localhost:44333';
 
-app.post('/openai', async (req, res) => {
-  const { prompt } = req.body;
-
-  // Valider
-  if (!prompt || prompt.length < 3 || prompt.length > 1000) {
-    return res.status(400).send({ 
-      error: 'Prompt skal være mellem 3 og 1000 tegn' 
-    });
-  }
-
-  // Undgå xss
-  const sanitizedPrompt = prompt.replace(/[<>]/g, ''); 
-
-  try {
-    // Send prompten til OpenAI API
-    const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
-      {
-        model: 'gpt-3.5-turbo',
-        messages: [
-          { role: 'system', content: "You are a helpful assistant that generates structured JSON responses." },
-          { role: 'user', content: `Generate a structured JSON response with a 'title' and a 'bodytext'. Always in english. The 'title' should be a concise and clear summary, and the 'bodytext' should be detailed content based on the following prompt: "${sanitizedPrompt}"` }
-        ]
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.VITE_OPENAI_API_KEY}`,
-          'Content-Type': 'application/json'
-        },
-      }
-    );
-
-    console.log('OpenAI svar (råt JSON):', response.data);
-
-    let aiResponse;
-    try {
-      aiResponse = JSON.parse(response.data.choices[0].message.content);
-    } catch (parseError) {
-      return res.status(500).send({ error: 'Ugyldigt JSON-format fra OpenAI', details: parseError.message });
-    }
-
-    res.json({
-      response: aiResponse,
-    });
-  } catch (error) {
-    console.error('Fejl ved OpenAI-anmodning:', error.response?.data || error.message);
-    res.status(500).send({
-      error: 'Fejl ved at hente data fra OpenAI',
-      details: error.message
-    });
-  }
-});
-
 app.post('/create-content-node', async (req, res) => {
   const { aiResponse, token } = req.body;
 
@@ -101,7 +48,6 @@ app.post('/create-content-node', async (req, res) => {
 });
 
 
-
 // Default GET route for server status
 app.get('/', (req, res) => {
   res.send('Backend server kører. Brug POST /openai til at sende prompts.');
@@ -121,19 +67,22 @@ app.post('/openaiwithhistory', async (req, res) => {
 
   const listOfConversation = JSON.parse(sanitizedPrompt);
 
+  let promptIsInvalid = false
   // Valider
   listOfConversation.forEach(element => {
     const prompt = element.content[0].text;
     const role = element.role;
     if ((!prompt || prompt.length < 3 || prompt.length > 1000) && role === "user") {
-      return res.status(400).send({ 
-        error: 'Prompt skal være mellem 3 og 1000 tegn' 
-      });
+      promptIsInvalid = true
     }
   });
 
+  if(promptIsInvalid){
+    return res.status(400).send({ 
+      error: 'Prompt skal være mellem 3 og 1000 tegn' 
+    });
+  }
 
-console.log(history)
   try {
     // Send prompten til OpenAI API
     const response = await axios.post(

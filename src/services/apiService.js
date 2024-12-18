@@ -64,8 +64,13 @@ export async function createContentNode(aiResponse, token) {
         name: aiResponse.title, 
       },
     ],
+    /*
     parent: {
       id: "e9862648-dd5a-454a-bdad-3e3d6343b257", 
+    },
+    */
+    parent: {
+      id: "aa2f2ad8-3cc3-491b-a1e2-f5e970597856", 
     },
     documentType: {
       id: "c3b10a51-b8d3-4ad2-b5a0-15a3cd99b6ca", 
@@ -89,27 +94,6 @@ export async function createContentNode(aiResponse, token) {
     throw error;
   }
 }
-
-
-
-
-export const fetchOpenAIResponse = async (prompt, token) => {
-  try {
-    const response = await axios.post(
-      "http://localhost:3000/openai",
-      { prompt: prompt },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Fejl ved hentning af OpenAI svar:", error);
-    throw error;
-  }
-};
 
 export const fetchOpenAIResponseWithHistory = async (history, token) => {
   try {
