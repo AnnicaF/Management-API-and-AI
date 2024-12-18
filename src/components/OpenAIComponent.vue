@@ -135,6 +135,7 @@ const handleSend = async () => {
   position: relative;
   display: inline-block;
   width: 800px;
+  margin-bottom: 100px;
 }
 
 .custom-textarea {

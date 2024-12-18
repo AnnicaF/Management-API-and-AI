@@ -85,29 +85,6 @@ app.post('/create-content-node', async (req, res) => {
     return res.status(401).send({ error: 'Adgang nægtet. Token mangler.' });
   }
 
-  const contentNodeData = {
-    values: [
-      { alias: "title", value: aiResponse.title },
-      { alias: "bodyText", value: aiResponse.body },
-    ],
-    variants: [
-      {
-        culture: null,
-        segment: null,
-        name: aiResponse.title,
-      },
-    ],
-    parent: {
-      id: "e9862648-dd5a-454a-bdad-3e3d6343b257",
-    },
-    documentType: {
-      id: "c3b10a51-b8d3-4ad2-b5a0-15a3cd99b6ca",
-    },
-    template: {
-      id: "518c282d-6591-4943-8b29-cfe9fdf70c58",
-    },
-  };
-
   try {
     const response = await axios.post(`${host}/umbraco/management/api/v1/document`, contentNodeData, {
       headers: {

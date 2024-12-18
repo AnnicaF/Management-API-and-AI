@@ -5,25 +5,24 @@
         While AI can assist in the creation process, it is essential to verify, refine, and credit sources to ensure quality and compliance with copyright standards.
       </p>
     </div>
-  </template>
+</template>
   
-  <script setup>
-  </script>
-  
-  <style scoped>
-  .text-reminder {
-    position: fixed;  
-    bottom: 110px;   
-    left: 50%;      
-    transform: translateX(-50%); 
-    width: 795px;    
-    text-align: center; 
-  }
-  
-  p {
-    font-size: 12px;
-    color: #1B254F;
-    margin: 0;  
-  }
-  </style>
+<style scoped>
+.text-reminder {
+  position: fixed;
+  bottom: 70px; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  z-index: 10; 
+  padding: 10px 0;
+}
+
+p {
+  font-size: 12px;
+  color: #1B254F;
+  margin: 0;
+}
+</style>
   
