@@ -13,7 +13,7 @@
   </nav>
   <div class="home-view">
     <HeaderComponent />
-    <OpenAIComponent />
+    <OpenAIComponent view="home"/>
     <ReminderText />
     <Footer/>
   </div>
