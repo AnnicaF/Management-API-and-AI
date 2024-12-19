@@ -1,0 +1,79 @@
+.textarea-container {
+  position: relative;
+  display: inline-block;
+  width: 800px;
+  margin-bottom: 100px;
+}
+
+.custom-textarea {
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #C2C2C2;
+  color: #000;
+  border-radius: 5px;
+  padding: 10px 50px 10px 10px;
+  font-size: 15px;
+  font-family: 'Lato', sans-serif;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.custom-textarea::placeholder {
+  color: #C2C2C2;
+}
+
+.textarea-large {
+  height: 132px;
+}
+
+.textarea-small {
+  height: 100px;
+}
+
+.send-button {
+  position: absolute;
+  top: 80%;
+  right: 20px;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #3545B0;
+  font-size: 20px;
+  padding: 0;
+}
+
+.success-message,
+.error-message {
+  margin-top: 10px;
+}
+
+.message-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-initials {
+  background-color: #f2f2f5;
+}
+
+.ai-initials {
+  background-color: #1B254F;
+  color: white;
+}
+
+.message-content {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-right: 10px;
+  word-wrap: break-word;
+}

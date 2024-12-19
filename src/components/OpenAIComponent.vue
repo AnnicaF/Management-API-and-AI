@@ -1,35 +1,9 @@
-<template>
-  <div class="textarea-container">
-    <textarea 
-      v-model="userPrompt" 
-      :class="['custom-textarea', sizeClass]" 
-      :placeholder="placeholderText"
-      rows="4" 
-      cols="50">
-    </textarea>
-    <button 
-      @click="handleSend" 
-      :disabled="isNodeLoading" 
-      class="send-button">
-      <i class="fas fa-paper-plane"></i>
-    </button>
-
-    <div v-if="successMessage" class="success-message">
-      <p>{{ successMessage }}</p>
-    </div>
-    
-    <div v-if="error" class="error-message">
-      <p>Fejl: {{ error }}</p>
-    </div>
-  </div>
-</template>
-
 <script setup>
+import '../assets/style/openAIComponent.css';
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router'; 
 import { addMessage, addToHistory, messageHistory } from '../stores/messageStore.js'; 
 import { getToken, fetchOpenAIResponseWithHistory } from '../services/apiService';
-
 
 const props = defineProps({
   size: {
@@ -38,7 +12,7 @@ const props = defineProps({
   },
   placeholderText: {
     type: String,
-    default: 'Enter your prompt here...', 
+    default: 'Enter your prompt here to help me generate your next blog post...', 
   },
 });
 
@@ -130,80 +104,29 @@ const handleSend = async () => {
 };
 </script>
 
-<style scoped>
-.textarea-container {
-  position: relative;
-  display: inline-block;
-  width: 800px;
-  margin-bottom: 100px;
-}
+<template>
+  <div class="textarea-container">
+    <textarea 
+      v-model="userPrompt" 
+      :class="['custom-textarea', sizeClass]" 
+      :placeholder="placeholderText"
+      rows="4" 
+      cols="50">
+    </textarea>
+    <button 
+      @click="handleSend" 
+      :disabled="isNodeLoading" 
+      class="send-button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-horizontal"><path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/><path d="M6 12h16"/></svg>
+    </button>
 
-.custom-textarea {
-  width: 100%;
-  background-color: #fff;
-  border: 1px solid #C2C2C2;
-  color: #000;
-  border-radius: 5px;
-  padding: 10px 50px 10px 10px;
-  font-size: 15px;
-  font-family: Arial, sans-serif;
-  outline: none;
-  box-sizing: border-box;
-}
+    <div v-if="successMessage" class="success-message">
+      <p>{{ successMessage }}</p>
+    </div>
+    
+    <div v-if="error" class="error-message">
+      <p>Fejl: {{ error }}</p>
+    </div>
+  </div>
+</template>
 
-.textarea-large {
-  height: 132px;
-}
-
-.textarea-small {
-  height: 100px;
-}
-
-.send-button {
-  position: absolute;
-  top: 80%;
-  right: 20px;
-  transform: translateY(-50%) rotate(30deg);
-  background-color: transparent;
-  border: none;
-  width: auto;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #3545B0;
-  font-size: 20px;
-  padding: 0;
-}
-
-.success-message,
-.error-message {
-  margin-top: 10px;
-}
-
-.message-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.user-initials {
-  background-color: #f2f2f5;
-}
-
-.ai-initials {
-  background-color: #1B254F;
-  color: white;
-}
-
-.message-content {
-  background-color: #f9f9f9;
-  padding: 10px;
-  border-radius: 10px;
-  max-width: 70%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-right: 10px;
-  word-wrap: break-word;
-}
-</style>
