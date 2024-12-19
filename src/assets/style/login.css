@@ -41,14 +41,14 @@
     padding: 20px;
   }
   
-  h1 {
+  .login-page h1 {
     font-size: 64px;
-    font-weight: 500;
+    font-weight: 400;
     margin-bottom: 38px;
     color: #3545B0;
   }
   
-  h3 {
+  .login-page h3 {
     font-size: 15px;
     font-weight: 400;
     margin-bottom: 38px;

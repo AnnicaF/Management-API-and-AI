@@ -15,6 +15,10 @@ const props = defineProps({
     type: String,
     default: 'Enter your prompt here to help me generate your next blog post...', 
   },
+  view: {
+    type: String,
+    default: 'home', // Default view is home
+  },
 });
 
 const userPrompt = ref('');
@@ -26,6 +30,10 @@ const router = useRouter();
 
 const sizeClass = computed(() => {
   return props.size === 'small' ? 'textarea-small' : 'textarea-large';
+});
+
+const viewClass = computed(() => {
+  return props.view === 'response' ? 'fixed-bottom' : '';
 });
 
 const fetchOpenAI = async () => {

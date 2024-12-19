@@ -13,3 +13,7 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .response-view {
+    padding-bottom: 180px; /* Adjust this based on your textarea height */
+  }
