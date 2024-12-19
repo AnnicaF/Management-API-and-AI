@@ -125,7 +125,7 @@ const handleSend = async () => {
 </script>
 
 <template>
-  <div class="textarea-container">
+  <div class="textarea-container" :class="viewClass">
     <Toast v-if="toastVisible" :message="toastMessage" :type="toastType" />
     <textarea 
       v-model="userPrompt" 
