@@ -1,0 +1,16 @@
+.text-reminder {
+    position: fixed;
+    bottom: 70px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    z-index: 10; 
+    padding: 10px 0;
+  }
+  
+  p {
+    font-size: 12px;
+    color: #1B254F;
+    margin: 0;
+  }

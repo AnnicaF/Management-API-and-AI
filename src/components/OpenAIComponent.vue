@@ -30,6 +30,7 @@ import { useRouter } from 'vue-router';
 import { addMessage, addToHistory, messageHistory } from '../stores/messageStore.js'; 
 import { getToken, fetchOpenAIResponseWithHistory } from '../services/apiService';
 
+
 const props = defineProps({
   size: {
     type: String,

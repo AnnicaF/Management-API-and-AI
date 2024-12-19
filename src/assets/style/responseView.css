@@ -1,0 +1,15 @@
+  .response-view {
+    margin: 50px auto;
+    max-width: 800px;
+    text-align: center;
+  }
+  
+  .back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
