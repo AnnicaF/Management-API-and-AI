@@ -20,7 +20,7 @@ router.push('/');
     </nav>
     <div class="response-view">
       <AiResponse />
-      <OpenAIComponent size="small" placeholderText="Message UmbracoWriter"/>
+      <OpenAIComponent size="small" placeholderText="Message UmbracoWriter" view="response"/>
       <ReminderText />
       <Footer />
     </div>
