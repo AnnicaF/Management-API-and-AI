@@ -23,10 +23,10 @@ export async function getToken() {
       console.log("Token hentet:", response.data.access_token);
       return response.data.access_token;
     } else {
-      throw new Error("Ingen adgangstoken fundet.");
+      throw new Error("No access token found.");
     }
   } catch (error) {
-    console.error("Fejl ved hentning af token:", error.response?.data || error.message);
+    console.error("Error retrieving token:", error.response?.data || error.message);
     throw error;
   }
 }
@@ -44,7 +44,7 @@ export async function getCurrentUser(token) {
     console.log("Brugerdata hentet:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Fejl ved hentning af brugerdata:", error.response?.data || error.message);
+    console.error("Error retrieving user data:", error.response?.data || error.message);
     throw error;
   }
 }
@@ -90,7 +90,7 @@ export async function createContentNode(aiResponse, token) {
 
     return response.data;
   } catch (error) {
-    console.error("Fejl ved oprettelse af content node:", error.response?.data || error.message);
+    console.error("Error creating content node:", error.response?.data || error.message);
     throw error;
   }
 }
@@ -108,7 +108,7 @@ export const fetchOpenAIResponseWithHistory = async (history, token) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Fejl ved hentning af OpenAI svar:", error);
+    console.error("Error retrieving OpenAI response:", error);
     throw error;
   }
 };
