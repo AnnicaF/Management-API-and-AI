@@ -56,8 +56,8 @@ const messages = messageStore;
 }
 
 .edit-icon-btn svg {
-  width: 50px;
-  height: 50px;
+  width: 20px;
+  height: 20px;
   fill: currentColor; /* Matches the text color */
   stroke: currentColor; /* Matches the text color */
 }

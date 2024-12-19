@@ -8,14 +8,14 @@
     text-align: center; 
   }
   
-  h1 {
+  .text-area h1 {
     font-size: 40px;
-    font-weight: 300;
+    font-weight: 200;
     margin-bottom: 20px;
     color: #3545B0
   }
   
-  h3 {
+  .text-area h3 {
     font-size: 16px;
     font-weight: 400;
     line-height: 30px;
