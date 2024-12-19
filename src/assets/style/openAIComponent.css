@@ -22,18 +22,14 @@
   color: #C2C2C2;
 }
 
-.textarea-large {
-  height: 132px;
-}
-
 .textarea-small {
   height: 100px;
 }
 
 .send-button {
   position: absolute;
-  top: 80%;
-  right: 20px;
+  top: 68%;
+  right: 10px;
   transform: translateY(-50%);
   background-color: transparent;
   border: none;
@@ -45,7 +41,7 @@
   cursor: pointer;
   color: #3545B0;
   font-size: 20px;
-  padding: 0;
+  padding: 5px;
 }
 
 .success-message,
@@ -76,4 +72,15 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-right: 10px;
   word-wrap: break-word;
+}
+
+.textarea-container.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 800px;
+  z-index: 1000;
+  padding-bottom: 20px;
 }

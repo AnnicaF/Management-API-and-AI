@@ -109,6 +109,8 @@
     resize: none;
     outline: none;
     box-sizing: border-box;
+    flex: 1; 
+    line-height: 1.5; 
   }
   
   .body-field {
@@ -123,4 +125,27 @@
     resize: none;
     outline: none;
     box-sizing: border-box;
+  }
+
+  .title-field-container {
+    display: flex;
+    align-items: flex-start; 
+    gap: 8px; 
+    position: relative;
+  }
+  
+  .edit-icon-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start; 
+    margin-top: 2px; 
+    position: relative;
+  }
+  
+  .edit-icon-btn svg {
+    width: 20px;
+    height: 20px;
   }
