@@ -20,18 +20,68 @@ app.use(cors(corsOptions));
 // Umbraco API host
 const host = 'https://localhost:44333';
 
-app.post('/openai', async (req, res) => {
-  const { prompt } = req.body;
+app.post('/create-content-node', async (req, res) => {
+  const { aiResponse, token } = req.body;
 
+  // Validering af input
+  if (!aiResponse || !aiResponse.title || !aiResponse.body) {
+    return res.status(400).send({ error: 'Mangler data fra AI.' });
+  }
+
+  if (!token) {
+    return res.status(401).send({ error: 'Adgang nægtet. Token mangler.' });
+  }
+
+  try {
+    const response = await axios.post(`${host}/umbraco/management/api/v1/document`, contentNodeData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    res.status(201).send({ message: 'Content node oprettet i Umbraco', data: response.data });
+  } catch (error) {
+    console.error('Fejl ved oprettelse af content node:', error.response?.data || error.message);
+    res.status(500).send({ error: 'Fejl ved oprettelse af content node i Umbraco', details: error.message });
+  }
+});
+
+
+// Default GET route for server status
+app.get('/', (req, res) => {
+  res.send('Backend server kører. Brug POST /openai til at sende prompts.');
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server kører på port ${port}`);
+});
+
+
+app.post('/openaiwithhistory', async (req, res) => {
+  const { history } = req.body;
+
+  // Undgå xss
+  const sanitizedPrompt = history.replace(/[<>]/g, ''); 
+
+  const listOfConversation = JSON.parse(sanitizedPrompt);
+
+  let promptIsInvalid = false
   // Valider
-  if (!prompt || prompt.length < 3 || prompt.length > 1000) {
+  listOfConversation.forEach(element => {
+    const prompt = element.content[0].text;
+    const role = element.role;
+    if ((!prompt || prompt.length < 3 || prompt.length > 1000) && role === "user") {
+      promptIsInvalid = true
+    }
+  });
+
+  if(promptIsInvalid){
     return res.status(400).send({ 
       error: 'Prompt skal være mellem 3 og 1000 tegn' 
     });
   }
-
-  // Undgå xss
-  const sanitizedPrompt = prompt.replace(/[<>]/g, ''); 
 
   try {
     // Send prompten til OpenAI API
@@ -40,8 +90,8 @@ app.post('/openai', async (req, res) => {
       {
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: "You are a helpful assistant that generates structured JSON responses." },
-          { role: 'user', content: `Generate a structured JSON response with a 'title' and a 'bodytext'. Always in english. The 'title' should be a concise and clear summary, and the 'bodytext' should be detailed content based on the following prompt: "${sanitizedPrompt}"` }
+          { role: 'system', content: "You are a helpful assistant that generates structured JSON responses. Generate a structured JSON response with a 'title' and a 'bodytext'. Always in english. The 'title' should be a concise and clear summary, and the 'bodytext' should be detailed content based on the users prompts." },
+          ...JSON.parse(sanitizedPrompt)
         ]
       },
       {
@@ -71,43 +121,4 @@ app.post('/openai', async (req, res) => {
       details: error.message
     });
   }
-});
-
-app.post('/create-content-node', async (req, res) => {
-  const { aiResponse, token } = req.body;
-
-  // Validering af input
-  if (!aiResponse || !aiResponse.title || !aiResponse.body) {
-    return res.status(400).send({ error: 'Mangler data fra AI.' });
-  }
-
-  if (!token) {
-    return res.status(401).send({ error: 'Adgang nægtet. Token mangler.' });
-  }
-
-  try {
-    const response = await axios.post(`${host}/umbraco/management/api/v1/document`, contentNodeData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    res.status(201).send({ message: 'Content node oprettet i Umbraco', data: response.data });
-  } catch (error) {
-    console.error('Fejl ved oprettelse af content node:', error.response?.data || error.message);
-    res.status(500).send({ error: 'Fejl ved oprettelse af content node i Umbraco', details: error.message });
-  }
-});
-
-
-
-// Default GET route for server status
-app.get('/', (req, res) => {
-  res.send('Backend server kører. Brug POST /openai til at sende prompts.');
-});
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server kører på port ${port}`);
 });
