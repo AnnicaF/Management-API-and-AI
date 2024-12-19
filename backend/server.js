@@ -25,11 +25,11 @@ app.post('/create-content-node', async (req, res) => {
 
   // Validering af input
   if (!aiResponse || !aiResponse.title || !aiResponse.body) {
-    return res.status(400).send({ error: 'Mangler data fra AI.' });
+    return res.status(400).send({ error: 'Missing data from AI.' });
   }
 
   if (!token) {
-    return res.status(401).send({ error: 'Adgang nægtet. Token mangler.' });
+    return res.status(401).send({ error: 'Access denied. Token is missing.' });
   }
 
   try {
@@ -40,17 +40,17 @@ app.post('/create-content-node', async (req, res) => {
       },
     });
 
-    res.status(201).send({ message: 'Content node oprettet i Umbraco', data: response.data });
+    res.status(201).send({ message: 'Content node created in Umbraco', data: response.data });
   } catch (error) {
-    console.error('Fejl ved oprettelse af content node:', error.response?.data || error.message);
-    res.status(500).send({ error: 'Fejl ved oprettelse af content node i Umbraco', details: error.message });
+    console.error('Error creating content node:', error.response?.data || error.message);
+    res.status(500).send({ error: 'Error creating content node in Umbraco', details: error.message });
   }
 });
 
 
 // Default GET route for server status
 app.get('/', (req, res) => {
-  res.send('Backend server kører. Brug POST /openai til at sende prompts.');
+  res.send('Backend server is running. Use POST /openai to send prompts.');
 });
 
 const port = process.env.PORT || 3000;
@@ -108,16 +108,16 @@ app.post('/openaiwithhistory', async (req, res) => {
     try {
       aiResponse = JSON.parse(response.data.choices[0].message.content);
     } catch (parseError) {
-      return res.status(500).send({ error: 'Ugyldigt JSON-format fra OpenAI', details: parseError.message });
+      return res.status(500).send({ error: 'Invalid JSON format from OpenAI', details: parseError.message });
     }
 
     res.json({
       response: aiResponse,
     });
   } catch (error) {
-    console.error('Fejl ved OpenAI-anmodning:', error.response?.data || error.message);
+    console.error('OpenAI request error:', error.response?.data || error.message);
     res.status(500).send({
-      error: 'Fejl ved at hente data fra OpenAI',
+      error: 'Error retrieving data from OpenAI',
       details: error.message
     });
   }

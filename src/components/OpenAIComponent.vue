@@ -1,5 +1,6 @@
 <script setup>
 import '../assets/style/openAIComponent.css';
+import Toast from './Toast.vue';
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router'; 
 import { addMessage, addToHistory, messageHistory } from '../stores/messageStore.js'; 
@@ -35,14 +36,14 @@ const fetchOpenAI = async () => {
   try {
     const prompt = userPrompt.value.trim();
     if (!prompt) {
-      throw new Error("Prompt kan ikke være tom.");
+      throw new Error("Prompt cannot be empty.");
     }
 
     const token = await getToken();
     const response = await fetchOpenAIResponse(prompt, token);
 
     if (!response || typeof response !== 'object' || !response.response) {
-      throw new Error("Ugyldigt svar fra serveren.");
+      throw new Error("Invalid response from server.");
     }
 
     // response gemmes i aiResponse 
@@ -50,11 +51,11 @@ const fetchOpenAI = async () => {
     console.log("Modtaget OpenAI-respons:", aiResponse.value);
 
     const umbracoResponse = await createContentNode(aiResponse.value, token);
-    successMessage.value = "Content node er oprettet i Umbraco!";
+    successMessage.value = "Content node is created in Umbraco!";
 
   } catch (err) {
     error.value = err.message || "En ukendt fejl opstod.";
-    console.error("Fejl ved OpenAI-anmodning:", err);
+    console.error("OpenAI request error:", err);
   } finally {
     isNodeLoading.value = false;
   }
@@ -69,6 +70,10 @@ defineExpose({
   userPrompt
 });
 
+const toastVisible = ref(false);
+const toastMessage = ref("");
+const toastType = ref("success");
+
 const handleSend = async () => {
   const token = await getToken();
   try {
@@ -77,7 +82,7 @@ const handleSend = async () => {
     console.log('Raw OpenAI Response:', response);
 
     if (!response || typeof response !== 'object' || !response.response) {
-      throw new Error('Ugyldigt svar fra OpenAI.');
+      throw new Error('Invalid response from OpenAI.');
     }
 
     const { title, bodytext } = response.response;
@@ -98,14 +103,22 @@ const handleSend = async () => {
     router.push({ name: 'response' });
 
   } catch (error) {
-    console.error('Fejl ved hentning af OpenAI svar:', error);
-    error.value = error.message || 'En ukendt fejl opstod.';
+    console.error('Error retrieving OpenAI response:', error);
+    error.value = error.message || 'An unknown error occurred.';
+    toastMessage.value = error.value;
+    toastVisible.value = true;
+    toastType.value = 'error';
+
+    setTimeout(() => {
+      toastVisible.value = false;
+    }, 3000);
   }
 };
 </script>
 
 <template>
   <div class="textarea-container">
+    <Toast v-if="toastVisible" :message="toastMessage" :type="toastType" />
     <textarea 
       v-model="userPrompt" 
       :class="['custom-textarea', sizeClass]" 

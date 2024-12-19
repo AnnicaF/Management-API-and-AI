@@ -1,12 +1,13 @@
 <script setup>
 import '../assets/style/footer.css'
-import Toast from '../components/Toats.vue'; 
+import Toast from './Toast.vue'; 
 import { ref } from 'vue';
 import { getToken, createContentNode as apiCreateContentNode } from '../services/apiService.js';
 import { getLastAIMessage } from '../stores/messageStore.js';
 
 const toastVisible = ref(false);
 const toastMessage = ref("");
+const toastType = ref("success");
 
 // Function to handle content creation
 const handleCreateContentNode = async () => {
@@ -15,7 +16,7 @@ const handleCreateContentNode = async () => {
     const latestAIMessage = getLastAIMessage();
 
     if (!latestAIMessage) {
-      throw new Error('Ingen AI-besked fundet!');
+      throw new Error('You cannot send an empty message. Please add content before submitting.');
     }
 
     const aiResponse = {
@@ -26,9 +27,9 @@ const handleCreateContentNode = async () => {
     const response = await apiCreateContentNode(aiResponse, token);
 
     // If content is successfully created, show success toast
-    console.log('Content node oprettet:', response);
     toastMessage.value = "Your content has been successfully sent to the Umbraco Backoffice";
     toastVisible.value = true;
+    toastType.value = 'success';
 
     // Hide the toast after 3 seconds
     setTimeout(() => {
@@ -36,7 +37,14 @@ const handleCreateContentNode = async () => {
     }, 3000);
 
   } catch (error) {
-    console.error('Fejl ved oprettelse af content node:', error.message);
+    toastMessage.value = error.message;
+    toastVisible.value = true;
+    toastType.value = 'error';
+
+    setTimeout(() => {
+      toastVisible.value = false;
+    }, 3000);
+
   }
 };
 </script>
@@ -44,7 +52,7 @@ const handleCreateContentNode = async () => {
 <template>
   <div>
     <!-- Toast Component -->
-    <Toast v-if="toastVisible" :message="toastMessage" type="success" />
+    <Toast v-if="toastVisible" :message="toastMessage" :type="toastType" />
 
     <!-- Footer with the Send to Umbraco button -->
     <footer class="footer">
