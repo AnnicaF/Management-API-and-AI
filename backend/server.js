@@ -28,6 +28,12 @@ app.post('/create-content-node', async (req, res) => {
     return res.status(400).send({ error: 'Mangler data fra AI.' });
   }
 
+  // Sanitering af input
+  const sanitizedTitle = String(aiResponse.title).replace(/[<>]/g, '');
+  const sanitizedBody = String(aiResponse.body).replace(/[<>]/g, '');
+  aiResponse.title = sanitizedTitle;
+  aiResponse.body = sanitizedBody;
+
   if (!token) {
     return res.status(401).send({ error: 'Adgang nægtet. Token mangler.' });
   }
