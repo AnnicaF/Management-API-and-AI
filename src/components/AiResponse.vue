@@ -33,32 +33,3 @@ const messages = messageStore;
       <FooterComponent />
     </div>
   </template>
-
-  <style>
-.title-field-container {
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Spacing between title and icon */
-}
-
-.title-field {
-  flex-grow: 1;
-  line-height: 1.5;
-}
-
-.edit-icon-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: flex-start; 
-    margin-top: 2px; 
-    position: relative;
-  }
-  
-  .edit-icon-btn svg {
-    width: 20px;
-    height: 20px;
-  }
-</style>
