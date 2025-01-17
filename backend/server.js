@@ -23,12 +23,24 @@ app.use((req, res, next) => {
 });
 
 // CORS-konfiguration for at tillade alle domæner
+const allowedOrigins = [
+  'http://localhost:5173', // Frontend-URL uden stier
+  'https://localhost:44333', // Backend-URL
+];
+
 const corsOptions = {
-  origin: '*',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Ikke tilladt af CORS'));
+    }
+  },
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
-app.use(cors(corsOptions)); 
+
+app.use(cors(corsOptions));
 
 // Umbraco API host
 const host = 'https://localhost:44333';
