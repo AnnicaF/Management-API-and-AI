@@ -2,6 +2,7 @@
 import '../assets/style/aiResponse.css'
 import FooterComponent from './Footer.vue';
 import { messages as messageStore } from '../stores/messageStore.js';
+import { ref } from 'vue';
 
 
 const messages = messageStore;
