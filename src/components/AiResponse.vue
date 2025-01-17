@@ -3,7 +3,15 @@ import '../assets/style/aiResponse.css'
 import FooterComponent from './Footer.vue';
 import { messages as messageStore } from '../stores/messageStore.js';
 
+
 const messages = messageStore;
+
+let editToggle = ref(false);
+
+const handleEditMessage = () => {
+  editToggle.value = !editToggle.value;
+  console.log('Changed to:', editToggle.value);
+};
 </script>
 
 <template>
