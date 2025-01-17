@@ -3,6 +3,7 @@ const axios = require('axios');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 dotenv.config();
 
@@ -40,7 +41,16 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutter
+  max: 50, // maks 50 anmodninger pr. IP
+});
+
+app.use(limiter);
+
 app.use(cors(corsOptions));
+
+
 
 // Umbraco API host
 const host = 'https://localhost:44333';
