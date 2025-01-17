@@ -47,18 +47,18 @@ const messages = messageStore;
 }
 
 .edit-icon-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.edit-icon-btn svg {
-  width: 50px;
-  height: 50px;
-  fill: currentColor; /* Matches the text color */
-  stroke: currentColor; /* Matches the text color */
-}
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start; 
+    margin-top: 2px; 
+    position: relative;
+  }
+  
+  .edit-icon-btn svg {
+    width: 20px;
+    height: 20px;
+  }
 </style>
