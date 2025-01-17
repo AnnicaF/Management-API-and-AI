@@ -2,12 +2,25 @@ const express = require('express');
 const axios = require('axios');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const helmet = require('helmet');
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+
+// Brug Helmet til at fjerne sikkerhedssårbare headers
+app.use(helmet());
+
+// Ekstra forsikring: Fjern X-powered-by
+app.disable('x-powered-by');
+
+// Fjern Server-headeren
+app.use((req, res, next) => {
+  res.removeHeader('Server');
+  next();
+});
 
 // CORS-konfiguration for at tillade alle domæner
 const corsOptions = {
