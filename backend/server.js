@@ -25,8 +25,7 @@ app.use((req, res, next) => {
 
 // CORS-konfiguration for at tillade alle domæner
 const allowedOrigins = [
-  'http://localhost:5173', // Frontend-URL uden stier
-  'https://localhost:44333', // Backend-URL
+  'http://localhost:5173' // Frontend-URL 
 ];
 
 const corsOptions = {
@@ -50,7 +49,7 @@ app.use(limiter);
 
 app.use(cors(corsOptions));
 
-
+/*
 
 // Umbraco API host
 const host = 'https://localhost:44333';
@@ -87,7 +86,7 @@ app.post('/create-content-node', async (req, res) => {
     res.status(500).send({ error: 'Fejl ved oprettelse af content node i Umbraco', details: error.message });
   }
 });
-
+*/
 
 // Default GET route for server status
 app.get('/', (req, res) => {
