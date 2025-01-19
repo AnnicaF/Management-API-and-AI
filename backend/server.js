@@ -124,7 +124,7 @@ app.post('/openaiwithhistory', async (req, res) => {
   }
 
   try {
-    // Send prompten til OpenAI API
+    // Send historik til OpenAI API
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
